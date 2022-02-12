@@ -94,5 +94,10 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         
     }
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.news = []
+        self.collectionView?.reloadData()
+    }
+    
 
 }
