@@ -73,5 +73,26 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         return cell
     }
     
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text else {
+            return
+        }
+        self.collectionView!.reloadData()
+        
+        APICaller.shared.getNewsBySearch(with: text) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let news):
+                    self?.news = news.articles
+                    self?.collectionView?.reloadData()
+                case.failure(let error):
+                    print(error.localizedDescription)
+                    
+                }
+            }
+        }
+        
+    }
+    
 
 }
