@@ -8,6 +8,8 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     private var searchController : UISearchController!
     
+    private var isSearch = false
+    
     private var label: UILabel = {
         let label = UILabel()
         label.text = "Please search"
@@ -55,8 +57,14 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return news.count
-        
+
+        if (self.news.count == 0) {
+            collectionView.showEmptyMessage(isSearch ? "News not found :(" : "Please search news...")
+        } else {
+            collectionView.restore()
+        }
+
+        return self.news.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -74,6 +82,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        isSearch = true
         guard let text = searchBar.text else {
             return
         }
@@ -96,8 +105,30 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.news = []
+        isSearch = false
         self.collectionView?.reloadData()
     }
     
 
+}
+
+extension UICollectionView {
+    func showEmptyMessage(_ message: String) {
+        let message: UILabel = {
+            let label = UILabel()
+            label.text = message
+            label.textColor = .gray
+            label.font = .systemFont(ofSize: 18, weight: .medium)
+            label.numberOfLines = 0
+            label.textAlignment = .center
+            label.sizeToFit()
+            return label
+        }()
+        
+        self.backgroundView = message;
+    }
+    
+    func restore() {
+        self.backgroundView = nil
+    }
 }
