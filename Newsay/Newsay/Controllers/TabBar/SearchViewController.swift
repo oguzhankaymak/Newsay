@@ -10,6 +10,14 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     private var isSearch = false
     
+    private var activiyLoader : UIActivityIndicatorView = {
+        let activityIndicatorView = UIActivityIndicatorView()
+        activityIndicatorView.hidesWhenStopped = true
+        activityIndicatorView.style = .large
+        activityIndicatorView.color = .systemGray
+        return activityIndicatorView
+    }()
+    
     private var label: UILabel = {
         let label = UILabel()
         label.text = "Please search"
@@ -53,6 +61,8 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        view.addSubview(activiyLoader)
+        activiyLoader.center = view.center
         
     }
     
@@ -82,6 +92,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        activiyLoader.startAnimating()
         isSearch = true
         guard let text = searchBar.text else {
             return
@@ -94,7 +105,9 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
                 case .success(let news):
                     self?.news = news.articles
                     self?.collectionView?.reloadData()
+                    self?.activiyLoader.stopAnimating()
                 case.failure(let error):
+                    self?.activiyLoader.stopAnimating()
                     print(error.localizedDescription)
                     
                 }
