@@ -68,7 +68,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 
-        if (self.news.count == 0) {
+        if (self.news.count == 0 && !activiyLoader.isAnimating) {
             collectionView.showEmptyMessage(isSearch ? "News not found :(" : "Please search news...")
         } else {
             collectionView.restore()
