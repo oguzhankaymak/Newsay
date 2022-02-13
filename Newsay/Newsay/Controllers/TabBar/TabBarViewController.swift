@@ -6,12 +6,12 @@ class TabBarViewController: UITabBarController {
         super.viewDidLoad()
 
         let vc1 = HomeViewController()
-        let vc2 = CategoryViewController()
-        let vc3 = SearchViewController()
+        let vc2 = SearchViewController()
+        let vc3 = CategoryViewController()
         
         vc1.title = "News"
-        vc2.title = "Category"
-        vc3.title = "Search"
+        vc2.title = "Search"
+        vc3.title = "Category"
         
         vc2.navigationItem.largeTitleDisplayMode = .always
         vc3.navigationItem.largeTitleDisplayMode = .always
@@ -21,8 +21,9 @@ class TabBarViewController: UITabBarController {
         let nav3 = UINavigationController(rootViewController: vc3)
         
         nav1.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 1)
-        nav2.tabBarItem = UITabBarItem(title: "Category", image: UIImage(systemName: "list.bullet"), tag: 1)
-        nav3.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
+        nav2.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
+        nav3.tabBarItem = UITabBarItem(title: "Category", image: UIImage(systemName: "list.bullet"), tag: 1)
+        
         
         nav1.navigationBar.scrollEdgeAppearance = nav1.navigationBar.standardAppearance
         
