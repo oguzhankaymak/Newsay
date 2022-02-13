@@ -91,6 +91,16 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        activiyLoader.startAnimating()
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        let vc = NewsDetailViewController(news: news[indexPath.row])
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
+        activiyLoader.stopAnimating()
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         activiyLoader.startAnimating()
         isSearch = true
