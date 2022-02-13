@@ -64,6 +64,16 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        activiyLoader.startAnimating()
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        let vc = NewsDetailViewController(news: news[indexPath.row])
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
+        activiyLoader.stopAnimating()
+    }
+    
     private func fetchData(){
         APICaller.shared.getNews { [weak self] result in
             DispatchQueue.main.async {
