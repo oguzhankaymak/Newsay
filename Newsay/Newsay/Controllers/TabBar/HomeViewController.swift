@@ -5,9 +5,18 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     private var collectionView: UICollectionView?
     private var news: [Article] = []
     
+    private var activiyLoader : UIActivityIndicatorView = {
+        let activityIndicatorView = UIActivityIndicatorView()
+        activityIndicatorView.hidesWhenStopped = true
+        activityIndicatorView.style = .large
+        activityIndicatorView.color = .systemGray
+        return activityIndicatorView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        activiyLoader.startAnimating()
         fetchData()
         
         let layout = UICollectionViewFlowLayout()
@@ -29,6 +38,12 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         collectionView.delegate = self
         collectionView.frame = view.bounds
         view.addSubview(collectionView)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        view.addSubview(activiyLoader)
+        activiyLoader.center = view.center
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -56,9 +71,11 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 case .success(let news):
                     self?.news = news.articles
                     self?.collectionView?.reloadData()
+                    self?.activiyLoader.stopAnimating()
                     
                 case.failure(let error):
                     print(error.localizedDescription)
+                    self?.activiyLoader.stopAnimating()
                 }
             }
         }
