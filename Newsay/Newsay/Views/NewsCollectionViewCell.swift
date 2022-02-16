@@ -87,7 +87,7 @@ class NewsCollectionViewCell: UICollectionViewCell {
     }
     
     public func configure(with viewModel : NewsCellViewModel) {
-        let prefixTitle = viewModel.title.count > 90 ? "\(viewModel.title.prefix(90))..." : viewModel.title
+        let prefixTitle = viewModel.title.count > 80 ? "\(viewModel.title.prefix(80))..." : viewModel.title
         newsTitle.text = prefixTitle
         newsImage.sd_setImage(with: viewModel.imageURL, completed: nil)
         
