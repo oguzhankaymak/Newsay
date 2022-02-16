@@ -1,8 +1,8 @@
 import UIKit
 
 class NewsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
-    private var collectionView: UICollectionView?
     
+    private var collectionView: UICollectionView?
     private var news: [Article] = []
     private var category: Category
     
@@ -13,7 +13,6 @@ class NewsViewController: UIViewController, UICollectionViewDataSource, UICollec
         activityIndicatorView.color = .systemGray
         return activityIndicatorView
     }()
-    
     
     init(category: Category) {
             self.category = category
@@ -27,6 +26,8 @@ class NewsViewController: UIViewController, UICollectionViewDataSource, UICollec
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        activiyLoader.startAnimating()
+        fetchCategoryData(categoryKey: category.key)
     
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 100
@@ -45,19 +46,15 @@ class NewsViewController: UIViewController, UICollectionViewDataSource, UICollec
         collectionView.delegate = self
         collectionView.frame = view.bounds
         view.addSubview(collectionView)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         view.addSubview(activiyLoader)
         activiyLoader.center = view.center
-        activiyLoader.startAnimating()
-        fetchCategoryData(categoryKey: category.key)
     }
     
     private func fetchCategoryData(categoryKey: String){
-        
         APICaller.shared.getNewsByCategory(with: categoryKey) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
@@ -65,6 +62,7 @@ class NewsViewController: UIViewController, UICollectionViewDataSource, UICollec
                     self?.news = news.articles
                     self?.collectionView?.reloadData()
                     self?.activiyLoader.stopAnimating()
+                    
                 case.failure(let error):
                     print(error.localizedDescription)
                     self?.activiyLoader.stopAnimating()
