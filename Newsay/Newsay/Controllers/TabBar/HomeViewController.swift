@@ -65,13 +65,10 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        activiyLoader.startAnimating()
-        collectionView.deselectItem(at: indexPath, animated: true)
         
         let vc = NewsDetailViewController(news: news[indexPath.row])
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
-        activiyLoader.stopAnimating()
     }
     
     private func fetchData(){
