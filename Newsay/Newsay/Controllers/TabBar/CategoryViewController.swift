@@ -59,6 +59,7 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
         
         let vc = NewsViewController(category: activeCategory)
         vc.navigationItem.largeTitleDisplayMode = .never
+        vc.navigationItem.title = activeCategory.name
         navigationController?.pushViewController(vc, animated: true)
     }
 
