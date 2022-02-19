@@ -41,5 +41,9 @@ pod install
 ### Usage
 
 
+## ScreenShots
+
+![newsaysss](https://user-images.githubusercontent.com/36153454/154802066-e597214f-40f4-4ce0-a414-1d77ced67782.png)
+
 
 
