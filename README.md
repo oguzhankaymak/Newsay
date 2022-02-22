@@ -1,21 +1,10 @@
 # Newsay
 
-<!-- Contents -->
-
-- [About Project](#about-project)
-  - [Purpose Of Project](#purpose-of-project)
-  - [API](#api)
-- [Installation](#installation)
-  - [Usage](#usage)
-
-## About Project
-
-### Purpose Of Project
- User can see the news in any category or  search news. So Newsay is a simple news application.
+Newsay is a simple news app with good looking user interface. User can see the news in any category or search news.
 
 #### Some Packages / Libraries
--[SDWebImage](https://github.com/SDWebImage/SDWebImage) <br />
--[TinyConstraints](https://github.com/roberthein/TinyConstraints) <br />
+- [SDWebImage](https://github.com/SDWebImage/SDWebImage) <br />
+- [TinyConstraints](https://github.com/roberthein/TinyConstraints) <br />
 
 
 ### API
@@ -36,10 +25,12 @@ git clone https://github.com/oguzhankaymak/Newsay.git
 pod install
 ```
 
-3. Run the app with xcode.
+3. Create free API key on [NewsAPI](https://newsapi.org) and add it in APISecrets
+```sh
+static let API_KEY = ""
+```
 
-### Usage
-
+4. Run the app with xcode.
 
 ## ScreenShots
 
