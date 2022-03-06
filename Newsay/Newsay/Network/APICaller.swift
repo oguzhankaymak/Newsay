@@ -6,15 +6,15 @@ final class APICaller {
     private init() {}
     
     struct Constants {
-        static let baseAPIURL = "https://newsapi.org/v2/top-headlines?country=tr&apiKey=\(APISecrets.API_KEY)"
+        static let baseAPIURL = "https://newsapi.org/v2/top-headlines?country=tr&apiKey=\(APISecrets.API_KEY)&pageSize=10"
     }
     
     enum APIError : Error {
         case failedToGetData
     }
     
-    public func getNews(completion: @escaping (Result<NewsResponse, Error>) -> Void){
-        guard let url = URL(string: Constants.baseAPIURL) else {
+    public func getNews(with page: Int, completion: @escaping (Result<NewsResponse, Error>) -> Void){
+        guard let url = URL(string: "\(Constants.baseAPIURL)&page=\(page)") else {
             return
         }
         
