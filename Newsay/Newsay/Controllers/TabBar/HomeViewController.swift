@@ -5,6 +5,10 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     private var collectionView: UICollectionView?
     private var news: [Article] = []
     
+    private var totalPage = 1
+    private var currentPage = 1
+    private var pageSize = 10
+    
     private var activiyLoader : UIActivityIndicatorView = {
         let activityIndicatorView = UIActivityIndicatorView()
         activityIndicatorView.hidesWhenStopped = true
@@ -17,12 +21,11 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         activiyLoader.startAnimating()
-        fetchData()
+        fetchData(page: currentPage)
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 80
-        layout.itemSize = CGSize(width: view.frame.size.width-50, height: 550)
+        layout.minimumLineSpacing = 50
         
         collectionView = UICollectionView(
             frame: .zero,
@@ -34,6 +37,8 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
             return
         }
         collectionView.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: NewsCollectionViewCell.identifier)
+        collectionView.register(LoadingCollectionViewCell.self, forCellWithReuseIdentifier: LoadingCollectionViewCell.identifier)
+        
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.frame = view.bounds
@@ -51,17 +56,27 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionViewCell.identifier, for: indexPath) as! NewsCollectionViewCell
         
-        let activeNews = news[indexPath.row]
-        
-        cell.configure(with: NewsCellViewModel(
-            title: activeNews.title ?? "",
-            imageURL: URL(string: activeNews.urlToImage ?? ""),
-            description: activeNews.description ?? "")
-        )
-        
-        return cell
+        if currentPage < totalPage && indexPath.row == news.count - 1 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier:LoadingCollectionViewCell.identifier, for: indexPath) as! LoadingCollectionViewCell
+            
+            cell.activiyLoaderView.startAnimating()
+            return cell
+        }
+        else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionViewCell.identifier, for: indexPath) as! NewsCollectionViewCell
+            
+            let activeNews = news[indexPath.row]
+            
+            cell.configure(with: NewsCellViewModel(
+                title: activeNews.title ?? "",
+                imageURL: URL(string: activeNews.urlToImage ?? ""),
+                description: activeNews.description ?? "")
+            )
+            
+            return cell
+            
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -71,13 +86,22 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func fetchData(){
-        APICaller.shared.getNews { [weak self] result in
-            DispatchQueue.main.async {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if currentPage < totalPage && indexPath.row == news.count - 1 {
+            currentPage = currentPage + 1
+            fetchData(page: currentPage)
+        }
+    }
+    
+    private func fetchData(page: Int){
+        APICaller.shared.getNews(with: page) { [weak self] result in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
                 switch result {
                 case .success(let news):
-                    self?.news = news.articles
-                    self?.collectionView?.reloadData()
+                    self?.news += news.articles
+                    self?.totalPage = Int((Float(news.totalResults) / Float(self!.pageSize)).rounded(.awayFromZero))
+                   
+                   self?.collectionView?.reloadData()
                     self?.activiyLoader.stopAnimating()
                     
                 case.failure(let error):
@@ -87,5 +111,15 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
             }
         }
     }
+    
+}
 
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if(currentPage < totalPage && indexPath.row == news.count - 1){
+            return CGSize(width: view.frame.size.width, height: 20)
+        }
+        return CGSize(width: view.frame.size.width-50, height: 550)
+    }
+    
 }
