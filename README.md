@@ -34,7 +34,7 @@ static let API_KEY = ""
 
 ## ScreenShots
 
-![newsaysss](https://user-images.githubusercontent.com/36153454/154802066-e597214f-40f4-4ce0-a414-1d77ced67782.png)
+![ss](https://user-images.githubusercontent.com/36153454/157528313-0e9f6d24-44f0-4de6-a274-d1ade1524c85.png)
 
 
 
