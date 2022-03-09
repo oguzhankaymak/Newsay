@@ -38,9 +38,9 @@ final class APICaller {
         task.resume()
     }
     
-    public func getNewsByCategory(with categoryKey: String, completion: @escaping (Result<NewsResponse, Error>) -> Void){
+    public func getNewsByCategory(categoryKey: String, page: Int ,completion: @escaping (Result<NewsResponse, Error>) -> Void){
         
-        guard let url = URL(string: "\(Constants.baseAPIURL)&category=\(categoryKey)" ) else {
+        guard let url = URL(string: "\(Constants.baseAPIURL)&category=\(categoryKey)&page=\(page)" ) else {
             return
         }
         
